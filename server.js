@@ -25,7 +25,7 @@ const postModel = require('./schema')
 app.use(bodyParser.json());
 //with this commented out the app won't take the data submitted from the form but it will take
 //the data if i submit it from postman
-app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.urlencoded({ extended: true }))
 
 
 
@@ -126,7 +126,9 @@ app.post('/posts', (req, res) => {
 
     newPost.save()
         .then(post => {
-            res.json(post)
+            // res.json(post)
+            //will redirect to the home page after post is saved to db
+            res.redirect('/')
             console.log(req.body)
         })
         .catch(err => {
@@ -134,6 +136,20 @@ app.post('/posts', (req, res) => {
         })
 })
 
+app.delete('/posts', (req, res) => {
+    postModel.findOneAndRemove({
+        _id: req.params.id,
+        // name: req.body.name,
+        // quote: req.body.quote,
+    })
+        .then(res => {
+            console.log('Post successfully removed from collection!');
+            res.json({ success: id })
+        })
+        .catch(err => {
+            console.error(err)
+        })
+})
 
 
 

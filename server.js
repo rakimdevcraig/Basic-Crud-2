@@ -81,6 +81,18 @@ app.get('/posts', (req, res) => {
         })
 })
 
+//get one post
+app.get('/posts/id', (req, res) => {
+    let id = req.params.id
+    postModel.findOne(id)
+        .then((post) => {
+            res.json(post)
+        })
+        .catch(err => {
+            console.error(err)
+        })
+})
+
 
 //how to test updating something 
 // PostModel.findOneAndUpdate(
@@ -129,22 +141,25 @@ app.post('/posts', (req, res) => {
             // res.json(post)
             //will redirect to the home page after post is saved to db
             res.redirect('/')
-            console.log(req.body)
+            console.log(post)
         })
         .catch(err => {
             console.error(err)
         })
+    res.status(201).json({
+        message: "success",
+        Post: newPost
+    })
 })
 
 app.delete('/posts', (req, res) => {
-    postModel.findOneAndRemove({
-        _id: req.params.id,
-        // name: req.body.name,
-        // quote: req.body.quote,
+    postModel.findOneAndDelete({
+        name: req.body.name,
+        quote: req.body.quote
     })
         .then(res => {
             console.log('Post successfully removed from collection!');
-            res.json({ success: id })
+            res.json({ success: _id })
         })
         .catch(err => {
             console.error(err)
